@@ -1,95 +1,67 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client'
+import React from "react";
+import { useState } from "react";
+import cities from "./data/cities";
+
+
+
+
 
 export default function Home() {
+  const [pageNumber, setPageNumber] = useState(0);
+  let arrayOfChunks = [];
+
+  function CreatePageNavigation(){
+    return (
+   <p>{(pageNumber)+1} of {arrayOfChunks.length} </p>)
+   ;
+  }
+
+  function DisplayCityList(){
+    arrayOfChunks = [];
+    console.log(arrayOfChunks);
+    for (let i = 0; i < cities.length ; i += 5){
+      const chunk = cities.slice(i , i + 5);
+      arrayOfChunks.push(chunk);
+    }
+    return arrayOfChunks[pageNumber].map((city, index)=>{
+      return <li key={index}>{city}</li>
+    });
+  
+  }
+
+  function handleNextClick(){
+    if(pageNumber === ((arrayOfChunks.length)-1)){
+      setPageNumber(0);
+    }else{
+    setPageNumber((pageNumber+1));
+    }
+  }
+
+  function handlePreviousClick(){
+      
+    if (pageNumber === 0){
+      
+      setPageNumber((arrayOfChunks.length)-1);
+    }else{
+    setPageNumber((pageNumber -1));
+    }
+  }
+ 
+  
+
+  
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+    <main>
+      <h1>Lists of Cities</h1>
+      <ul className="cityDisplay">
+        <DisplayCityList/>
+      </ul>
+      <div className="navBar">
+        <button onClick={handlePreviousClick}>Previous</button>
+        <CreatePageNavigation/>
+        <button onClick={handleNextClick}>Next</button>
+     </div>
     </main>
   );
 }
